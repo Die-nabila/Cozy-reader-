@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#fbf6ee">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Cozy Reader</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LIBRARY -->
+  <section id="library" class="screen">
+    <header class="topbar">
+      <h1>My Library</h1>
+      <div class="topbar-actions">
+        <button id="openVocab" class="btn ghost" type="button">Vocabulary</button>
+        <label class="btn primary" for="fileInput">+ Import</label>
+        <input id="fileInput" type="file" accept=".epub,.pdf,application/epub+zip,application/pdf" multiple hidden>
+      </div>
+    </header>
+    <main class="scroll">
+      <div id="importStatus" class="notice" hidden></div>
+      <div id="bookGrid" class="grid"></div>
+      <div id="emptyLibrary" class="empty" hidden>
+        <p class="empty-title">Your shelf is empty</p>
+        <p>Tap <strong>+ Import</strong> to add an EPUB or PDF book.<br>Everything stays on this device.</p>
+      </div>
+    </main>
+  </section>
+
+  <!-- READER -->
+  <section id="reader" class="screen" hidden>
+    <header class="readerbar">
+      <button id="readerBack" class="icon-btn" type="button" aria-label="Back to library">‹</button>
+      <div id="readerTitle" class="reader-title"></div>
+      <div class="reader-actions">
+        <button id="tocBtn" class="icon-btn" type="button" aria-label="Table of contents">☰</button>
+        <span id="epubTools" class="tools">
+          <button id="fontDown" class="icon-btn small" type="button" aria-label="Smaller text">A−</button>
+          <button id="fontUp" class="icon-btn small" type="button" aria-label="Larger text">A+</button>
+        </span>
+        <span id="pdfTools" class="tools" hidden>
+          <button id="zoomOut" class="icon-btn" type="button" aria-label="Zoom out">−</button>
+          <span id="zoomLabel" class="zoom-label">100%</span>
+          <button id="zoomIn" class="icon-btn" type="button" aria-label="Zoom in">+</button>
+        </span>
+        <button id="bookVocab" class="icon-btn small" type="button" aria-label="Words saved from this book">Words</button>
+      </div>
+    </header>
+
+    <div id="stage" class="stage">
+      <div id="pdfScroll" class="pdf-scroll" hidden></div>
+      <div id="pdfNotice" class="stage-notice" hidden>This page has no selectable text (it looks scanned), so words can't be translated here.</div>
+      <div id="stageLoading" class="stage-loading" hidden>Opening…</div>
+    </div>
+
+    <footer class="readerfoot">
+      <button id="prevCh" class="nav-btn" type="button" aria-label="Previous chapter">«</button>
+      <button id="prevPg" class="nav-btn" type="button" aria-label="Previous page">‹</button>
+      <div class="pos">
+        <span id="posLabel"></span>
+        <span id="pdfPos" hidden><input id="pageInput" type="number" min="1" inputmode="numeric" aria-label="Page number"> <span id="pageTotal"></span></span>
+      </div>
+      <button id="nextPg" class="nav-btn" type="button" aria-label="Next page">›</button>
+      <button id="nextCh" class="nav-btn" type="button" aria-label="Next chapter">»</button>
+    </footer>
+
+    <aside id="tocPanel" class="toc" hidden>
+      <div class="toc-head"><strong>Contents</strong><button id="tocClose" class="icon-btn" type="button" aria-label="Close">✕</button></div>
+      <ol id="tocList"></ol>
+    </aside>
+    <div id="tocScrim" class="scrim" hidden></div>
+
+    <div id="sheet" class="sheet" hidden role="dialog" aria-live="polite">
+      <div class="sheet-row">
+        <div id="sheetWord" class="sheet-word"></div>
+        <button id="sheetClose" class="icon-btn small" type="button" aria-label="Close">✕</button>
+      </div>
+      <div id="sheetBody" class="sheet-body"></div>
+      <div id="sheetActions" class="sheet-actions"></div>
+    </div>
+  </section>
+
+  <!-- VOCABULARY -->
+  <section id="vocab" class="screen" hidden>
+    <header class="topbar">
+      <button id="vocabBack" class="icon-btn" type="button" aria-label="Back">‹</button>
+      <h1>Vocabulary</h1>
+      <span id="vocabCount" class="count"></span>
+    </header>
+    <div class="vocab-filters">
+      <input id="vocabSearch" type="search" placeholder="Search vocabulary" aria-label="Search vocabulary" autocomplete="off">
+      <select id="vocabBook" aria-label="Filter by book"></select>
+    </div>
+    <main class="scroll">
+      <ul id="vocabList" class="vocab-list"></ul>
+      <div id="vocabEmpty" class="empty" hidden></div>
+    </main>
+  </section>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <div id="confirm" class="modal" hidden>
+    <div class="modal-card" role="alertdialog" aria-modal="true">
+      <p id="confirmText"></p>
+      <div class="modal-actions">
+        <button id="confirmNo" class="btn ghost" type="button">Cancel</button>
+        <button id="confirmYes" class="btn danger" type="button">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="lib/jszip.min.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
